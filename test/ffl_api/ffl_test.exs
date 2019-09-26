@@ -182,4 +182,69 @@ defmodule FflApi.FflTest do
       assert %Ecto.Changeset{} = Ffl.change_dealer(dealer)
     end
   end
+
+  describe "dealer_options" do
+    alias FflApi.Ffl.DealerOption
+
+    @valid_attrs %{enabled: true, fees: "some fees", preferred: true, schedules: "some schedules"}
+    @update_attrs %{enabled: false, fees: "some updated fees", preferred: false, schedules: "some updated schedules"}
+    @invalid_attrs %{enabled: nil, fees: nil, preferred: nil, schedules: nil}
+
+    def dealer_option_fixture(attrs \\ %{}) do
+      {:ok, dealer_option} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Ffl.create_dealer_option()
+
+      dealer_option
+    end
+
+    test "list_dealer_options/0 returns all dealer_options" do
+      dealer_option = dealer_option_fixture()
+      assert Ffl.list_dealer_options() == [dealer_option]
+    end
+
+    test "get_dealer_option!/1 returns the dealer_option with given id" do
+      dealer_option = dealer_option_fixture()
+      assert Ffl.get_dealer_option!(dealer_option.id) == dealer_option
+    end
+
+    test "create_dealer_option/1 with valid data creates a dealer_option" do
+      assert {:ok, %DealerOption{} = dealer_option} = Ffl.create_dealer_option(@valid_attrs)
+      assert dealer_option.enabled == true
+      assert dealer_option.fees == "some fees"
+      assert dealer_option.preferred == true
+      assert dealer_option.schedules == "some schedules"
+    end
+
+    test "create_dealer_option/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Ffl.create_dealer_option(@invalid_attrs)
+    end
+
+    test "update_dealer_option/2 with valid data updates the dealer_option" do
+      dealer_option = dealer_option_fixture()
+      assert {:ok, %DealerOption{} = dealer_option} = Ffl.update_dealer_option(dealer_option, @update_attrs)
+      assert dealer_option.enabled == false
+      assert dealer_option.fees == "some updated fees"
+      assert dealer_option.preferred == false
+      assert dealer_option.schedules == "some updated schedules"
+    end
+
+    test "update_dealer_option/2 with invalid data returns error changeset" do
+      dealer_option = dealer_option_fixture()
+      assert {:error, %Ecto.Changeset{}} = Ffl.update_dealer_option(dealer_option, @invalid_attrs)
+      assert dealer_option == Ffl.get_dealer_option!(dealer_option.id)
+    end
+
+    test "delete_dealer_option/1 deletes the dealer_option" do
+      dealer_option = dealer_option_fixture()
+      assert {:ok, %DealerOption{}} = Ffl.delete_dealer_option(dealer_option)
+      assert_raise Ecto.NoResultsError, fn -> Ffl.get_dealer_option!(dealer_option.id) end
+    end
+
+    test "change_dealer_option/1 returns a dealer_option changeset" do
+      dealer_option = dealer_option_fixture()
+      assert %Ecto.Changeset{} = Ffl.change_dealer_option(dealer_option)
+    end
+  end
 end

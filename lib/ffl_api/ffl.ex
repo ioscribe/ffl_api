@@ -201,4 +201,100 @@ defmodule FflApi.Ffl do
     region <>
       "-" <> district <> "-" <> county <> "-" <> type <> "-" <> expiration <> "-" <> sequence
   end
+
+  alias FflApi.Ffl.DealerOption
+
+  @doc """
+  Returns the list of dealer_options.
+
+  ## Examples
+
+      iex> list_dealer_options()
+      [%DealerOption{}, ...]
+
+  """
+  def list_dealer_options do
+    Repo.all(DealerOption)
+  end
+
+  @doc """
+  Gets a single dealer_option.
+
+  Raises `Ecto.NoResultsError` if the Dealer option does not exist.
+
+  ## Examples
+
+      iex> get_dealer_option!(123)
+      %DealerOption{}
+
+      iex> get_dealer_option!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_dealer_option!(id), do: Repo.get!(DealerOption, id)
+
+  @doc """
+  Creates a dealer_option.
+
+  ## Examples
+
+      iex> create_dealer_option(%{field: value})
+      {:ok, %DealerOption{}}
+
+      iex> create_dealer_option(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_dealer_option(attrs \\ %{}) do
+    %DealerOption{}
+    |> DealerOption.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a dealer_option.
+
+  ## Examples
+
+      iex> update_dealer_option(dealer_option, %{field: new_value})
+      {:ok, %DealerOption{}}
+
+      iex> update_dealer_option(dealer_option, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_dealer_option(%DealerOption{} = dealer_option, attrs) do
+    dealer_option
+    |> DealerOption.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a DealerOption.
+
+  ## Examples
+
+      iex> delete_dealer_option(dealer_option)
+      {:ok, %DealerOption{}}
+
+      iex> delete_dealer_option(dealer_option)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_dealer_option(%DealerOption{} = dealer_option) do
+    Repo.delete(dealer_option)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking dealer_option changes.
+
+  ## Examples
+
+      iex> change_dealer_option(dealer_option)
+      %Ecto.Changeset{source: %DealerOption{}}
+
+  """
+  def change_dealer_option(%DealerOption{} = dealer_option) do
+    DealerOption.changeset(dealer_option, %{})
+  end
 end

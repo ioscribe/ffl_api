@@ -22,6 +22,7 @@ defmodule FflApiWeb.Router do
   scope "/api", FflApiWeb do
     pipe_through :api
     resources "/dealers", DealerController, except: [:new, :edit]
+    resources "/dealer_options", DealerOptionController, except: [:new, :edit]
   end
 
   # Other scopes may use custom stacks.
