@@ -104,16 +104,23 @@ defmodule FflApi.Ffl do
 
   def insert_dealers do
     dealers =
-      readTSV()
+      read_tsv()
       |> parseLines()
-      |> removeHeaders()
+      |> remove_headers()
       |> Enum.map(&addBusinessName(&1))
-      |> Enum.map(&toMap(&1))
+      |> Enum.map(&to_map(&1))
       |> Enum.filter(&(&1.premise_state != "PR"))
 
     Enum.map(
       dealers,
       &Repo.insert!(%Dealer{
+        license: &1.license,
+        license_region: &1.license_region,
+        license_district: &1.license_district,
+        license_county: &1.license_county,
+        license_type: &1.license_type,
+        license_expiration: &1.license_expiration,
+        license_sequence: &1.license_sequence,
         license_name: &1.license_name,
         business_name: &1.business_name,
         premise_street: &1.premise_street,
@@ -124,16 +131,12 @@ defmodule FflApi.Ffl do
         mail_city: &1.mail_city,
         mail_state: &1.mail_state,
         mail_zip: &1.mail_zip,
-        phone_number: &1.phone_number,
-        fees: &1.fees,
-        schedule: &1.schedule,
-        enabled: &1.enabled,
-        preferred: &1.preferred
+        phone_number: &1.phone_number
       })
     )
   end
 
-  def readTSV do
+  def read_tsv do
     {status, file} = File.read("assets/csv/ffl-list.txt")
 
     case status do
@@ -159,19 +162,20 @@ defmodule FflApi.Ffl do
     end
   end
 
-  def removeHeaders(list) do
+  def remove_headers(list) do
     List.delete_at(list, 0)
     |> List.delete_at(0)
   end
 
-  def toMap(line) do
+  def to_map(line) do
     %{
-      #      license_region: Enum.at(line, 0),
-      #      license_district: Enum.at(line, 1),
-      #      license_county: Enum.at(line, 2),
-      #      license_type: Enum.at(line, 3),
-      #      license_expiration: Enum.at(line, 4),
-      #      license_sequence: Enum.at(line, 5),
+      license: to_license(line),
+      license_region: Enum.at(line, 0),
+      license_district: Enum.at(line, 1),
+      license_county: Enum.at(line, 2),
+      license_type: Enum.at(line, 3),
+      license_expiration: Enum.at(line, 4),
+      license_sequence: Enum.at(line, 5),
       license_name: Enum.at(line, 6),
       business_name: Enum.at(line, 7),
       premise_street: Enum.at(line, 8),
@@ -182,11 +186,19 @@ defmodule FflApi.Ffl do
       mail_city: Enum.at(line, 13),
       mail_state: Enum.at(line, 14),
       mail_zip: Enum.at(line, 15),
-      phone_number: Enum.at(line, 16),
-      fees: "",
-      schedule: "",
-      enabled: false,
-      preferred: false
+      phone_number: Enum.at(line, 16)
     }
+  end
+
+  def to_license(line) do
+    region = Enum.at(line, 0)
+    district = Enum.at(line, 1)
+    county = Enum.at(line, 2)
+    type = Enum.at(line, 3)
+    expiration = Enum.at(line, 4)
+    sequence = Enum.at(line, 5)
+
+    region <>
+      "-" <> district <> "-" <> county <> "-" <> type <> "-" <> expiration <> "-" <> sequence
   end
 end

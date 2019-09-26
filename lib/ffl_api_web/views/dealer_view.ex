@@ -12,20 +12,23 @@ defmodule FflApiWeb.DealerView do
 
   def render("dealer.json", %{dealer: dealer}) do
     %{id: dealer.id,
-      license_name: dealer.license_name,
+      license: dealer.license,
+      license_region: dealer.license_region,
+      license_district: dealer.license_district,
+      license_county: dealer.license_county,
+      license_type: dealer.license_type,
+      license_expiration: dealer.license_expiration,
+      license_sequence: dealer.license_sequence,
       business_name: dealer.business_name,
-      premise_street: dealer.premise_street,
-      premise_city: dealer.premise_city,
-      premise_state: dealer.premise_state,
-      premise_zip: dealer.premise_zip,
-      mail_street: dealer.mail_street,
+      license_name: dealer.license_name,
       mail_city: dealer.mail_city,
       mail_state: dealer.mail_state,
+      mail_street: dealer.mail_street,
       mail_zip: dealer.mail_zip,
       phone_number: dealer.phone_number,
-      fees: dealer.fees,
-      schedule: dealer.schedule,
-      enabled: dealer.enabled,
-      preferred: dealer.preferred}
+      premise_city: dealer.premise_city,
+      premise_state: dealer.premise_state,
+      premise_street: dealer.premise_street,
+      premise_zip: dealer.premise_zip}
   end
 end
