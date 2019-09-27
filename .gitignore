@@ -35,3 +35,7 @@ npm-debug.log
 
 *.swo
 *.swp
+
+.DS_Store
+
+lib/ffl_api/ffl/.DS_Store

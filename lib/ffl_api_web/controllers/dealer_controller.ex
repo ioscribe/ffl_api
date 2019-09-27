@@ -6,8 +6,8 @@ defmodule FflApiWeb.DealerController do
 
   action_fallback FflApiWeb.FallbackController
 
-  def index(conn, _params) do
-    dealers = Ffl.list_dealers()
+  def index(conn, params) do
+    dealers = Ffl.list_dealers(params)
     render(conn, "index.json", dealers: dealers)
   end
 

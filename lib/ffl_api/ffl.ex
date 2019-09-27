@@ -2,8 +2,7 @@ defmodule FflApi.Ffl do
   @moduledoc """
   The Ffl context.
   """
-
-  import Ecto.Query, warn: false
+  import Ecto.Query, warn: false, only: [from: 2]
   alias FflApi.Repo
 
   alias FflApi.Ffl.Dealer
@@ -17,8 +16,19 @@ defmodule FflApi.Ffl do
       [%Dealer{}, ...]
 
   """
-  def list_dealers do
-    Repo.all(Dealer)
+  def list_dealers(params) do
+    search_term = get_in(params, ["query"])
+
+    Dealer
+    |> dealer_search(search_term)
+    |> Repo.all()
+  end
+
+  def dealer_search(query, search_term) do
+    wildcard_search = "%#{search_term}%"
+
+    from dealer in query,
+      where: ilike(dealer.business_name, ^wildcard_search)
   end
 
   @doc """
