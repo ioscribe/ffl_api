@@ -15,6 +15,8 @@ defmodule FflApiWeb.DealerOptionView do
       enabled: dealer_option.enabled,
       preferred: dealer_option.preferred,
       fees: dealer_option.fees,
-      schedules: dealer_option.schedules}
+      schedules: dealer_option.schedules,
+      dealer_id: dealer_option.dealer_id
+    }
   end
 end

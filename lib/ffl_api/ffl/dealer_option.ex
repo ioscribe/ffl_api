@@ -15,7 +15,7 @@ defmodule FflApi.Ffl.DealerOption do
   @doc false
   def changeset(dealer_option, attrs) do
     dealer_option
-    |> cast(attrs, [:enabled, :preferred, :fees, :schedules])
-    |> validate_required([:enabled, :preferred, :fees, :schedules])
+    |> cast(attrs, [:enabled, :preferred, :fees, :schedules, :dealer_id])
+    |> validate_required([:enabled, :preferred, :fees, :schedules, :dealer_id])
   end
 end
