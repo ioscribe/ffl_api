@@ -17,10 +17,13 @@ defmodule FflLocatorWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/install", BigCommerceController, :install
+    get "/load", BigCommerceController, :load
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", FflLocatorWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", FflLocatorWeb do
+    pipe_through :api
+    resources "/dealers", DealerController, except: [:new, :edit]
+  end
 end
