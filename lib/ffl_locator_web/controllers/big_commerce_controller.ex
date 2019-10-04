@@ -6,25 +6,9 @@ defmodule FflLocatorWeb.BigCommerceController do
   end
 
   def install(conn, %{"code" => code, "scope" => scope, "context" => context}) do
-    headers =
-      headers = [
-        {"Content-type", "application/json"},
-        {"Accept", "application/json"}
-      ]
+    {:ok, response} = bigcommerce_auth(code, scope, context)
 
-    body =
-      Jason.encode!(%{
-        "client_id" => System.get_env("BC_APP_CLIENT_ID"),
-        "client_secret" => System.get_env("BC_APP_CLIENT_SECRET"),
-        "redirect_uri" => "https://bc-ffl-server.herokuapp.com/install",
-        "grant_type" => "authorization_code",
-        "code" => code,
-        "scope" => scope,
-        "context" => context
-      })
-
-    {:ok, response} = HTTPoison.post("https://login.bigcommerce.com/oauth2/token", body, headers)
-
+    # @todo: store response body?
     IO.puts("RESPONSE BODY:")
     IO.inspect(response.body)
 
@@ -39,6 +23,29 @@ defmodule FflLocatorWeb.BigCommerceController do
     conn
     |> Plug.Conn.delete_resp_header("x-frame-options")
     |> render("index.html")
+  end
+
+  def bigcommerce_auth(code, scope, context) do
+    headers =
+      headers = [
+        {"Content-type", "application/json"},
+        {"Accept", "application/json"}
+      ]
+
+    body =
+      Jason.encode!(%{
+        "client_id" => System.get_env("BC_APP_CLIENT_ID"),
+        "client_secret" => System.get_env("BC_APP_CLIENT_SECRET"),
+        # @todo: make this url dynamic
+        "redirect_uri" => "https://bc-ffl-server.herokuapp.com/install",
+        "grant_type" => "authorization_code",
+        "code" => code,
+        "scope" => scope,
+        "context" => context
+      })
+
+    # @todo: make this url dynamic
+    HTTPoison.post("https://login.bigcommerce.com/oauth2/token", body, headers)
   end
 
   # signed_payload : encoded_json_string.encoded_hmac_signature
